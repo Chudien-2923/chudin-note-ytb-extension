@@ -1,0 +1,28 @@
+{
+  "name": "chudin-note-youtube",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local timestamped YouTube notes and course-style notebooks in Chrome.",
+  "license": "MIT",
+  "engines": {
+    "node": "^22.13.0 || ^24.0.0 || >=26.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "node scripts/build.mjs",
+    "pack": "node scripts/pack.mjs"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "2.6.2",
+    "@types/chrome": "0.3.7",
+    "@types/jsdom": "30.0.0",
+    "fake-indexeddb": "6.2.7",
+    "fflate": "0.8.3",
+    "jsdom": "29.1.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}
