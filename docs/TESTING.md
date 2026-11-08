@@ -1,5 +1,23 @@
 # Kiểm chứng
 
+## Kiểm tra bản phát hành thủ công — 0.2.0 Unreleased
+
+Người dùng duyệt nút xem phiên bản đang cài, kiểm tra GitHub theo yêu cầu và mở trang tải khi có bản mới; không auto-update. Nút nằm ở cuối panel và Cuốn sổ, không remount editor hoặc tự chạy khi mở/focus giao diện. Worker chỉ nhận từ trang extension hợp lệ (panel cần phiên đã attach), payload phải rỗng; không có fetch bridge từ YouTube. Không đổi schema/notes.
+
+Trước triển khai, hai suite mới RED vì chưa có module release-check; ca kiểm tra command qua phiên panel cũng RED vì chưa có lệnh được hỗ trợ. Sau tích hợp: `npm run typecheck` exit 0, `npm test` **259/259 tests trong 19 files**, build/pack và `unzip -t artifacts/chudin-note-youtube-0.2.0.zip` pass, 16 runtime files. Bao phủ so sánh số phiên bản, tag/asset không an toàn, draft/prerelease, HTTP404/403/429/500, network/JSON/timeout fetch và body, không tự gọi mạng, single-flight, link cũ sau lỗi, retry thủ công, dispose và giữ nháp/focus.
+
+Command-line smoke Node/jsdom + fake-indexeddb chạy **built sidepanel.js và notebook.js cùng service-worker.js thật** qua transport/auth adapter. Cả hai hiện installed 0.2.0, không gọi GitHub khi mount, double click chỉ một lượt, có link chính thức khi available, mất mạng xóa link cũ và cho thử lại, current không có link, pagehide dispose. Panel dùng textarea/editor thật đang có nháp; chữ và DOM focus vẫn giữ sau kiểm tra. Đây không phải native keyboard/focus hoặc kiểm tra thị giác Chrome.
+
+Lần gọi public API GitHub thật trả **HTTP403 do rate limit**; giao diện hiển thị lỗi, không báo “mới nhất”. Đọc metadata v0.1.0 thực bằng CLI đã xác thực rồi dùng snapshot JSON ở boundary fetch trong smoke cho cả hai surface: nhận đúng asset và trạng thái build 0.2.0 mới hơn bản công khai. Credential CLI chỉ dùng cho công cụ kiểm chứng, không đưa vào extension/artifact. **Chưa chứng minh request 200 từ extension/Chrome thật.** Test thành công với snapshot không thay cho bằng chứng đó.
+
+Review source độc lập không phát hiện lỗi. Mechanical UI detector chạy một lần và trả `[]`, không chứng nhận pixel/contrast/native layout. Host permission mới là `https://api.github.com/*`; CSP chỉ mở connect-src API GitHub. Request không chứa note/nháp/video ID/cookie/auth/referrer; không polling, retry nền hoặc tải mã thực thi. Bản v0.1.0 đã phát hành không bị ghi đè. Sau triển khai, chủ repo yêu cầu commit/push source 0.2.0; yêu cầu này không gồm tag hoặc GitHub Release 0.2.0. Trước commit đã chạy lại typecheck, 259 tests, build/pack/unzip và smoke hai surface từ ZIP qua adapter như trên; chưa có nghiệm thu Chrome riêng cho nút mới.
+
+Người dùng kiểm tra Chrome:
+1. Reload đúng extension đang load `dist/`, cho phép host API GitHub nếu Chrome yêu cầu, rồi tải lại YouTube; không Remove/đổi folder/ID/profile.
+2. Mở panel hoặc Cuốn sổ, kéo xuống cuối: thấy phiên bản 0.2.0 và **Kiểm tra bản phát hành**. Mở giao diện không tự gọi API. Bấm nút: chờ → kết quả hoặc lỗi có thể thử lại.
+3. Bản công khai hiện v0.1.0, nên build 0.2.0 có thể báo mới hơn bản phát hành; không được gợi ý tự cài/downgrade. GitHub rate limit/mất mạng phải báo lỗi, không nói đã mới nhất.
+4. Giữ một nháp đang nhập, kiểm tra rồi quay lại: chữ/mốc không đổi. Thử panel hẹp, sáng/tối, bàn phím và tab Cuốn sổ. Nếu có bản công khai mới hơn hợp lệ sau này, liên kết phải mở đúng trang Release; người dùng tự tải ZIP và cập nhật cùng folder.
+
 ## Kiểm tra gói phát hành v0.1.0 — 2026-11-08
 
 Chủ repo yêu cầu phát hành GitHub Release v0.1.0 kèm ZIP; không yêu cầu Store hoặc auto-update. Trước cập nhật release metadata, working tree ở commit `bbf9ea670098fe6496adbfa5537c7ed9294966de` sạch và đồng bộ origin/main. Chạy từ lockfile bằng `npm ci` (87 packages), typecheck exit 0, **221/221 tests trong 17 files**, build/pack/unzip integrity/list pass. Đây là working tree hiện có, không phải một clean clone độc lập hoặc bằng chứng CI Linux.

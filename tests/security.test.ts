@@ -15,6 +15,7 @@ import type { BackgroundHandlers } from "../src/background/handlers";
 import type { TabCoordinator } from "../src/background/tabs";
 import type { PlayerReport } from "../src/domain/types";
 import type { Reply } from "../src/shared/protocol";
+import { checkGitHubRelease } from "../src/background/releases";
 
 interface BackgroundWorker {
   panels: PanelSessions;
@@ -107,7 +108,7 @@ const notebookPage: chrome.runtime.MessageSender = {
   origin,
   tab: { id: 9, windowId: 7, active: true } as chrome.tabs.Tab,
 };
-function setup(activeTabId = 4) {
+function setup(activeTabId = 4, fetchRelease: typeof fetch = fetch) {
   const calls: Array<[string, unknown]> = [];
   const tabs = {
     acceptReport(...args: unknown[]) {
@@ -151,6 +152,7 @@ function setup(activeTabId = 4) {
       notify() {},
       panels,
       quickNotes,
+      checkRelease: () => checkGitHubRelease("0.2.0", fetchRelease),
     });
     return { panels, quickNotes, handlers };
   };
@@ -603,4 +605,38 @@ it("rejects subframe reports and nonfinite player snapshots", async () => {
   expect(
     await call(worker, { ...sender, frameId: 0 }, "player.report", bad),
   ).toMatchObject({ ok: false, error: { code: "INVALID_INPUT" } });
+});
+
+it("checks releases only for an authenticated panel or own notebook page, never a content-script bridge", async () => {
+  let requests = 0;
+  const fetchRelease = (async () => {
+    requests++;
+    return new Response(JSON.stringify({
+      tag_name: "v0.3.0", draft: false, prerelease: false,
+      assets: [{
+        name: "chudin-note-youtube-0.3.0.zip", state: "uploaded",
+        browser_download_url: "https://github.com/Chudien-2923/chudin-note-ytb-extension/releases/download/v0.3.0/chudin-note-youtube-0.3.0.zip",
+      }],
+    }));
+  }) as typeof fetch;
+  const { worker, call, openAndAttach } = setup(4, fetchRelease);
+  for (const sender of [host(), frame(), { ...notebookPage, id: "foreign" }])
+    expect(await call(worker, sender, "checkRelease", {})).toMatchObject({
+      ok: false, error: { code: "UNAUTHORIZED" },
+    });
+  expect(requests).toBe(0);
+  const { session } = await openAndAttach();
+  const authenticated = { panelSession: session };
+  expect(await call(worker, frame(), "checkRelease", {}, authenticated)).toMatchObject({
+    ok: true, result: { state: "available", latestVersion: "0.3.0" },
+  });
+  expect(await call(worker, notebookPage, "checkRelease", {})).toMatchObject({
+    ok: true, result: { state: "available", latestVersion: "0.3.0" },
+  });
+  for (const payload of [{ url: "https://evil.test/" }, { videoId }, { note: "private" }])
+    expect(await call(worker, frame(), "checkRelease", payload, authenticated)).toMatchObject({
+      ok: false, error: { code: "INVALID_INPUT" },
+    });
+  expect(requests).toBe(2);
+  expect(await repo.listNotebooks()).toEqual([]);
 });

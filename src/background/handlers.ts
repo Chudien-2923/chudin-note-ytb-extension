@@ -12,6 +12,7 @@ import {
 import type { TabCoordinator } from "./tabs";
 import type { PanelAuthority, PanelSessions } from "./panel-sessions";
 import type { QuickNoteRequests } from "./quick-note";
+import type { ReleaseCheckResult } from "../shared/releases";
 export interface BackgroundHandlers {
   handleRequest(
     request: unknown,
@@ -67,6 +68,7 @@ export function createBackgroundHandlers(input: {
   notify(change: Invalidation): void;
   panels: PanelSessions;
   quickNotes: QuickNoteRequests;
+  checkRelease(): Promise<ReleaseCheckResult>;
 }): BackgroundHandlers {
   const {
     repository: repo,
@@ -75,6 +77,7 @@ export function createBackgroundHandlers(input: {
     notify,
     panels,
     quickNotes,
+    checkRelease,
   } = input;
   const reportVersions = new Map<number, string>();
   return {
@@ -249,6 +252,8 @@ export function createBackgroundHandlers(input: {
           result = await tabs.openNotebook(
             payload as Parameters<TabCoordinator["openNotebook"]>[0],
           );
+        else if (request.op === "checkRelease")
+          result = await checkRelease();
         else {
           const method = repo[request.op as keyof Repository] as (
             payload: unknown,

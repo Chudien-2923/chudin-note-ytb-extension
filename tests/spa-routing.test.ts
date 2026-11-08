@@ -9,6 +9,7 @@ import { clock } from "../src/domain/types";
 import { openDatabase } from "../src/storage/database";
 import { createPendingSeekStore } from "../src/storage/pending-seeks";
 import { createRepository } from "../src/storage/repository";
+import { checkGitHubRelease } from "../src/background/releases";
 
 const extensionId = "abcdefghijklmnopabcdefghijklmnop";
 const origin = `chrome-extension://${extensionId}`;
@@ -70,6 +71,7 @@ function setup(sourceUrl: string, currentUrl: string, videoId = "abcdefghijk") {
     }),
     extensionId,
     notify() {},
+    checkRelease: () => checkGitHubRelease("0.2.0"),
   });
   const call = (
     sender: chrome.runtime.MessageSender,

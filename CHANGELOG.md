@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 — Unreleased
+
+- Thêm phiên bản đang cài và nút **Kiểm tra bản phát hành** ở panel/Cuốn sổ: kiểm tra theo yêu cầu, so sánh số phiên bản, mở trang GitHub chính thức khi có bản mới; cập nhật ZIP vẫn thủ công.
+- Chỉ đọc metadata bản công khai ổn định có ZIP đúng tên/URL. Không tự kiểm tra nền, tải/cài mã mới, gửi ghi chú/video/cookie/token hoặc đổi schema dữ liệu.
+- Thêm host API GitHub và giới hạn CSP tương ứng; kiểm tra lỗi mạng, rate limit, timeout 10 giây, không có bản công khai và bản đang cài mới hơn bản GitHub. Lỗi không được báo nhầm “mới nhất”.
+
 ## 0.1.0 — 2026-11-08
 
 - Panel ghi chú trong trang YouTube: iframe extension-origin xác thực theo tab/document, giữ giao diện/editor và IndexedDB cũ, thay native Chrome side panel để hỗ trợ focus bằng bàn phím.

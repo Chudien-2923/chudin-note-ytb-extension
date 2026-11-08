@@ -10,7 +10,8 @@ export type FailureCode =
   | "PLAYER_UNAVAILABLE"
   | "SEEK_TIMEOUT"
   | "STORAGE_FAILED"
-  | "SCHEMA_UNSUPPORTED";
+  | "SCHEMA_UNSUPPORTED"
+  | "RELEASE_CHECK_FAILED";
 export class AppError extends Error {
   constructor(
     public code: FailureCode,

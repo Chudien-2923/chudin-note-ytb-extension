@@ -415,3 +415,34 @@ dialog .actions {
     padding-top: 12px;
   }
 }
+.release-check {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+.release-check-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.release-check-version {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.release-check-version strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.release-check .status:not(:empty) {
+  margin-top: 6px;
+}
+.release-check-offer:not(:empty) {
+  margin-top: 6px;
+}
+.release-check small {
+  margin-top: 6px;
+  max-width: 70ch;
+}

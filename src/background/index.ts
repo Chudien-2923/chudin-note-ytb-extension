@@ -7,6 +7,7 @@ import { createBackgroundHandlers, type BackgroundHandlers } from "./handlers";
 import { createPanelSessions } from "./panel-sessions";
 import { createQuickNoteRequests } from "./quick-note";
 import { handleToolbarClick } from "./panel-shortcut";
+import { checkGitHubRelease } from "./releases";
 // Transient authority: a worker restart drops it, and panel frames reauthenticate through their host.
 const panels = createPanelSessions(chrome.runtime.id);
 const quickNotes = createQuickNoteRequests(panels);
@@ -31,6 +32,7 @@ const ready = () =>
         },
         panels,
         quickNotes,
+        checkRelease: () => checkGitHubRelease(chrome.runtime.getManifest().version),
       });
     })
     .catch((error) => {

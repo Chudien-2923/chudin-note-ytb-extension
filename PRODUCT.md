@@ -32,6 +32,8 @@ User-approved fullscreen adaptation: fit the entire video proportionally in the 
 
 Approved design: timestamp at draft start, explicit save, recoverable drafts, note edit/delete, notebook create/rename/move video, local reading/search and pause/seek. Vietnamese UI and Unicode search. No accounts/cloud/AI/telemetry/export/import/backup. GitHub ZIP distribution only; no Chrome Web Store. Losing/uninstalling the extension/profile can lose data.
 
+User-approved manual release checking: show the installed version in the panel/notebook and check the fixed repository's public GitHub release metadata only when the user clicks. Offer an official release-page link for a newer installable stable release; updating the unpacked files remains manual. No polling, executable-code download/install, cookies/tokens or note/video-data transfer. GitHub receives normal connection metadata for that explicit request. This is the only extension-origin external network feature.
+
 ## Brand Commitments
 
 Display name Chudin Note for YouTube. Restrained host-like experience inspired by note-iina; do not simulate a player or add distracting decoration. MIT license approved.

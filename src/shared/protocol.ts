@@ -11,12 +11,14 @@ import {
 import { validVideoId } from "../domain/identity";
 import type { Repository } from "../storage/repository";
 import type { QuickNoteIntent } from "../background/quick-note";
+import type { ReleaseCheckResult } from "./releases";
 type MethodCommand<F> = F extends (...args: infer A) => Promise<infer O>
   ? { input: A extends [] ? Record<string, never> : A[0]; output: O }
   : never;
 export type CommandMap = {
   [K in keyof Repository]: MethodCommand<Repository[K]>;
 } & {
+  checkRelease: { input: Record<string, never>; output: ReleaseCheckResult };
   getPanelContext: { input: { windowId: number }; output: PanelContext };
   capturePlayer: { input: { binding: PlayerBinding }; output: PlayerSnapshot };
   resumePlayer: {
@@ -177,6 +179,7 @@ const operations: CommandName[] = [
   "seekFromPanel",
   "seekFromNotebook",
   "openNotebook",
+  "checkRelease",
 ];
 export function validateRequest(value: unknown): Request {
   const r = record(value);
@@ -192,6 +195,9 @@ export function validateRequest(value: unknown): Request {
   const requireRevision = (key: string) =>
     integer(p[key]) && (p[key] as number) > 0;
   switch (r.op) {
+    case "checkRelease":
+      valid = Object.keys(p).length === 0;
+      break;
     case "createNotebook":
       valid = typeof p.name === "string";
       break;

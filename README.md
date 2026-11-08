@@ -13,12 +13,13 @@ Ghi lại điều bạn hiểu khi xem YouTube, rồi đọc và tìm lại theo
 - Mở **Cuốn sổ** để đọc theo video hoặc toàn sổ, tìm nội dung tiếng Việt.
 - Bấm timestamp để mở/focus đúng video, pause và tua tới đoạn đã ghi.
 - Khi fullscreen, video/phụ đề/điều khiển được bố trí bên trái và panel bên phải; ảnh video giữ tỷ lệ, không bị panel phủ lên. Đóng panel trả lại vùng xem ban đầu; lưu note không tự đóng panel.
+- Từ **0.2.0**: xem phiên bản đang cài và bấm **Kiểm tra bản phát hành** ở cuối panel/Cuốn sổ. Nếu có bản mới hợp lệ, mở trang GitHub để tự tải ZIP; không tự tải/cài hoặc kiểm tra nền.
 
 **N** đơn mở panel; icon bật/ẩn panel; cả hai không tự pause. **Option + N**: pause → tạo/tiếp tục nháp → focus ô nhập → Enter lưu thành công rồi phát tiếp đúng video. Note mới lùi mốc 20 giây; nháp cũ giữ nguyên. N/Option+N trong ô gõ/bình luận/search hoặc IME không bị chiếm; Shift+N giữ nguyên. Phím tắt chỉ hoạt động ở trang video/panel, không phải toàn hệ thống/thanh địa chỉ. Một video thuộc một sổ, không tự lấy playlist làm course.
 
 ## Trạng thái
 
-**0.1.0 — [bản phát hành GitHub đầu tiên](https://github.com/Chudien-2923/chudin-note-ytb-extension/releases/tag/v0.1.0).** Chủ repo đã tự kiểm tra và xác nhận các luồng ghi nhanh, fullscreen chia vùng và phím đóng hoạt động trên môi trường của họ; sau bản sửa kết nối khi YouTube chuyển trang nội bộ, người dùng cũng báo hoạt động ổn trở lại. Typecheck, 221 behavioral tests, build/ZIP và command-line smoke đã chạy. Chưa chứng nhận mọi phiên bản Chrome/OS, IME hoặc từng trường hợp trong [checklist kiểm tra](docs/TESTING.md). Source code ZIP không thay cho build cài đặt.
+**Đang phát triển 0.2.0 — chưa phát hành.** Bản công khai hiện tại là [v0.1.0](https://github.com/Chudien-2923/chudin-note-ytb-extension/releases/tag/v0.1.0), chưa có nút kiểm tra bản phát hành. Chủ repo đã xác nhận các luồng cơ bản và bản sửa kết nối của 0.1.0 hoạt động. Bản 0.2.0 đã qua typecheck, 259 behavioral tests, build/ZIP và command-line smoke; giao diện/nút mới trong Chrome thật còn chờ người dùng kiểm tra. Chưa chứng nhận mọi phiên bản Chrome/OS, IME hoặc từng trường hợp trong [checklist kiểm tra](docs/TESTING.md). Source code ZIP không thay cho build cài đặt.
 
 ## Cài từ bản ZIP GitHub
 
@@ -45,7 +46,7 @@ npm run pack
 ```
 
 - Load unpacked: chọn **`dist/`**, không chọn thư mục source.
-- File để chia sẻ/cài: **`artifacts/chudin-note-youtube-0.1.0.zip`**.
+- Build hiện tại để tự cài/thử: **`artifacts/chudin-note-youtube-0.2.0.zip`**, chưa đăng GitHub Release.
 - `build` tạo worker ESM, content script IIFE, HTML/CSS/JS và icon PNG từ SVG local; `pack` kiểm tra allowlist và version trước khi ZIP. `pack` không tự build lại: luôn build trước pack.
 
 Không cần Node/npm để dùng ZIP đã build. Không có server để chạy.
@@ -90,6 +91,7 @@ Cập nhật build vào cùng folder cài đặt, Reload **đúng extension hi�
 Dữ liệu ở IndexedDB **trong Chrome profile của extension**, không nằm cùng folder video hay folder source.
 
 - Không tài khoản, cloud sync, analytics hoặc backend; extension không gửi note/lịch sử video tới server. YouTube vẫn có kết nối của chính trang YouTube.
+- Chỉ khi bấm **Kiểm tra bản phát hành**, worker gọi API GitHub công khai để đọc metadata bản mới nhất của repository cố định. Không gửi note, nháp, tên/ID video, cookie hay token xác thực; GitHub vẫn nhận IP và thông tin kết nối thông thường. Không kiểm tra định kỳ hoặc khi mở panel. Bấm liên kết bản phát hành sẽ mở website GitHub trong tab mới.
 - Không lưu lịch sử mọi video đã xem: chỉ lưu video bạn chủ động gán sổ/ghi chú.
 - **Chưa có export/import hoặc backup.** Mất Chrome profile, gỡ extension hoặc đổi extension ID có thể mất note/nháp. Không dùng làm bản lưu duy nhất của nội dung quan trọng.
 - Quota/JSON/schema không hợp lệ phải báo lỗi, không tự reset dữ liệu rỗng. IndexedDB commit không phải bảo đảm chống mọi hỏng ổ đĩa/mất điện.
@@ -98,9 +100,10 @@ Dữ liệu ở IndexedDB **trong Chrome profile của extension**, không nằm
 ### Quyền
 
 - Host `https://www.youtube.com/*`: đọc player/identity, đặt host của panel trong trang và tìm tab đúng video để tua. Static content script chỉ chạy top frame.
+- Host `https://api.github.com/*`: worker kiểm tra bản phát hành của đúng repository khi người dùng bấm nút. Chrome cấp quyền theo host; mã chỉ gọi endpoint metadata cố định, không cung cấp chức năng fetch URL tùy ý từ trang YouTube.
 - Không còn quyền `sidePanel`. Giao diện panel là iframe `chrome-extension://` cùng code đóng gói local, chỉ cho phép nhúng từ YouTube. Giao diện phải có phiên được worker xác thực theo tab/document mới đọc/ghi dữ liệu; không gửi note hoặc token ra trang YouTube.
 
-Không xin `<all_urls>`, quyền lịch sử/cookie/file/download hoặc quyền `tabs` rộng. Không chạy incognito. Toàn bộ code/assets được đóng gói local, CSP không cho kết nối mạng từ trang extension.
+Không xin `<all_urls>`, quyền lịch sử/cookie/file/download hoặc quyền `tabs` rộng. Không chạy incognito. Toàn bộ mã thực thi được đóng gói local; CSP chỉ cho kết nối API GitHub để đọc metadata, không tải/chạy mã extension từ mạng.
 
 ## Giới hạn hiện tại
 
@@ -111,6 +114,10 @@ Không AI/transcript, ảnh chụp, rich text, tags, xuất/nhập, xóa cả s�
 ## Cập nhật an toàn
 
 **Nâng cấp được, nhưng không tự động.** Theo dõi [GitHub Releases](https://github.com/Chudien-2923/chudin-note-ytb-extension/releases) để tải ZIP build khi có phiên bản mới. Giữ cùng Chrome profile, extension ID và folder cài đặt để tiếp tục dùng dữ liệu cũ; việc push source lên GitHub không cập nhật extension đã cài.
+
+Từ 0.2.0, xem dòng **Phiên bản đã cài** và bấm **Kiểm tra bản phát hành** ở cuối panel hoặc Cuốn sổ. Nút chỉ đọc bản công khai mới nhất có ZIP cài hợp lệ: báo đang dùng bản mới nhất, có bản mới (kèm liên kết), bản đang cài mới hơn bản công khai, hoặc chưa có bản công khai. Mất mạng/hết hạn/GitHub giới hạn lượt kiểm tra phải báo lỗi; không coi là “đã mới nhất”. Không có token GitHub, không tự tải/cài.
+
+Người dùng 0.1.0 cần cập nhật thủ công một lần khi 0.2.0 được phát hành để có nút này. Build 0.2.0 hiện mới hơn bản công khai 0.1.0 nên có thể báo đang dùng bản phát triển; không cần hạ phiên bản.
 
 1. **Không gỡ extension.** Không xóa dữ liệu/profile.
 2. Giải nén build mới đè nội dung vào **cùng folder cài đặt**, giữ đường dẫn ổn định.

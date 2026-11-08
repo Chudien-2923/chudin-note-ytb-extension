@@ -6,7 +6,7 @@ Git/tag/push/publish do maintainer thực hiện hoặc giao trợ lý bằng y�
 
 1. Tất cả tiêu chí docs/TESTING.md có bằng chứng hoặc giới hạn được maintainer ghi rõ; không gọi release-ready khi core Chrome flows còn chưa thử.
 2. README/CHANGELOG đúng chức năng/giới hạn, MIT/attribution có trong archive; không ghi một phiên bản Chrome là tested nếu chưa thử.
-3. Đồng bộ package.json, package-lock.json và manifest.json theo SemVer. Bản code hiện tại là 0.1.0; tag phát hành tương ứng là v0.1.0. Mỗi lần nâng cấp phải tăng version, tạo tag/release và ZIP mới; không ghi đè tag hoặc asset của bản đã phát hành.
+3. Đồng bộ package.json, package-lock.json và manifest.json theo SemVer. Bản phát triển hiện tại là 0.2.0 (chưa phát hành); bản công khai v0.1.0 giữ nguyên. Mỗi lần nâng cấp phải tăng version, tạo tag/release và ZIP mới; không ghi đè tag hoặc asset của bản đã phát hành.
 4. Từ clean checkout, chạy:
 
 ```sh
@@ -15,14 +15,16 @@ npm run typecheck
 npm test
 npm run build
 npm run pack
-unzip -t artifacts/chudin-note-youtube-0.1.0.zip
-unzip -l artifacts/chudin-note-youtube-0.1.0.zip
+unzip -t artifacts/chudin-note-youtube-0.2.0.zip
+unzip -l artifacts/chudin-note-youtube-0.2.0.zip
 ```
 
 Đổi tên ZIP theo version thực khi nâng version. Archive root phải có manifest, HTML/JS/CSS/icon và LICENSE; không source, secrets, node_modules, sourcemaps, note dữ liệu hoặc công cụ local.
 
 5. Tự cài ZIP đã giải nén trong profile thử nghiệm. Thử update **không gỡ extension**, đúng folder và ID. Kiểm tra ghi chú/nháp cũ rồi ghi note mới. Không thử migration phá dữ liệu trên profile chính.
 6. Khi người dùng yêu cầu phát hành, maintainer commit/tag/push, tạo GitHub Release từ tag version tương ứng, đính kèm ZIP build (không nhầm Source code ZIP), mô tả phạm vi đã thử và hạn chế dữ liệu/không backup. Không đánh dấu ổn định dựa trên unit tests.
+
+Nút kiểm tra từ 0.2.0 chỉ đọc `releases/latest` của repository cố định: bản công khai không draft/prerelease, tag SemVer 3 thành phần (có thể thêm `v`) và asset đã upload có tên `chudin-note-youtube-X.Y.Z.zip` cùng URL tải chính thức đúng tag. Đăng source/tag mà thiếu ZIP không đủ để được thông báo là bản nâng cấp sẵn sàng. Không cần token trong extension. Yêu cầu thêm tính năng 0.2.0 không tự cấp quyền commit/push/tag hoặc đăng Release mới.
 
 ## Hướng dẫn người cài
 
