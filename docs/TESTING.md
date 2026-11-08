@@ -1,5 +1,25 @@
 # Kiểm chứng
 
+## Sửa nhận diện URL sau chuyển trang nội bộ — 2026-11-08
+
+Người dùng báo panel vẫn lỗi sau reload. Chẩn đoán do người dùng tự chạy trong Chrome cho thấy worker trả `UNAUTHORIZED`; extension/top-frame/document/active/tab/window đều hợp lệ, nhưng URL nguồn có path `/`, trong khi URL tab có path `/watch` và video ID hợp lệ. Đây là bằng chứng Chrome của ca lỗi, không phải bằng chứng đã nghiệm thu bản sửa.
+
+Bản sửa dùng URL hiện tại từ `sender.tab.url` cho nhận diện video trong session, quick note, handler `player.report` và coordinator. Chỉ fallback sang URL nguồn khi Chrome không cung cấp URL tab; URL tab không hỗ trợ/hỏng không được fallback về video cũ. Nguồn vẫn phải là top-frame YouTube; giữ các kiểm tra extension/document/tab/window/session/generation. Worker failure được hiển thị như plain text thay vì che bằng thông báo reload chung. Không đổi schema, permissions hay dữ liệu.
+
+Trước sửa, suite SPA mới có 7 ca FAIL: home→watch, watch A→B, report video cũ và từ chối fallback khi tab hiện tại là home/Shorts/foreign/malformed. Smoke built-content với worker lỗi schema cũng FAIL vì thông báo cụ thể bị che. Sau sửa: `npm run typecheck` exit 0; `npm test` **221/221 tests, 17 files**; `npm run build`, `npm run pack`, `unzip -t artifacts/chudin-note-youtube-0.1.0.zip` pass, ZIP gồm 16 runtime files.
+
+Command-line smoke Node/jsdom + fake-indexeddb chạy **built content.js và service-worker.js thật**, nguồn giữ path `/` xuyên suốt home→A→B→A: private grant/attach, player context ready, lưu note của A và không thấy note đó ở B, trở lại A đọc đúng note/mốc; quick pause trên B; seek/quick pause cũ của A bị từ chối; giữ cùng iframe. Boundary Chrome transport/media/shadow-iframe được adapter, **không chạy sidepanel editor, Chrome/GUI hoặc chứng nhận native focus/keyboard/IME**. Smoke lỗi worker `UNAUTHORIZED` và `SCHEMA_UNSUPPORTED` hiển thị đúng nguyên nhân, không còn câu reload chung.
+
+Review source độc lập không phát hiện lỗi trong cutover. Các tình huống độ trễ URL/report thật, prerender/BFCache và báo cáo trễ từ document cũ chưa được kiểm chứng trong Chrome; không thêm retry hoặc mở rộng quyền để đoán xử lý. Những bảo vệ và giới hạn này không được suy diễn thành nghiệm thu browser.
+
+Sau khi nhận bản sửa, người dùng xác nhận “Oke nó đã hoạt động ổn rồi” vào 2026-11-08. Ghi nhận đây là **người dùng tự kiểm tra Chrome và xác nhận lỗi kết nối đã hết trong luồng họ vừa thử**; chưa có báo cáo chi tiết cho từng tổ hợp navigation/focus/IME/fullscreen, không tự đánh dấu toàn bộ checklist dưới đây pass.
+
+Checklist kiểm tra chi tiết (chưa có báo cáo riêng cho từng bước):
+1. Reload đúng extension hiện có đang trỏ vào `dist/`, rồi tải lại YouTube; không Remove hoặc đổi folder/ID.
+2. Từ trang chủ YouTube, bấm một video thường và đợi video chính sẵn sàng; bấm N, rồi Option+N. Panel phải kết nối, đọc đúng sổ/note, cho nhập nháp.
+3. Chuyển từ A sang B bằng liên kết YouTube, không reload toàn trang. Ghi chú/nháp phải thuộc đúng video; quay lại A phải còn dữ liệu đã lưu.
+4. Nếu lỗi tái xuất hiện, gửi thông báo cụ thể/ảnh; không gửi token hoặc note riêng tư. Native focus, IME, fullscreen và persistence của bản sửa chưa có báo cáo nghiệm thu riêng cho từng kịch bản.
+
 ## Chốt phiên và nghiệm thu người dùng — 2026-11-07
 
 Sau bản phím đóng, người dùng báo “Oke ổn hết rồi” và yêu cầu commit/push GitHub. Trước đó họ đã xác nhận fullscreen chia vùng hoạt động. Ghi nhận đây là **nghiệm thu do người dùng tự thao tác** cho các flow vừa phát triển, không phải browser automation của trợ lý và không tự đánh dấu toàn bộ checklist cũ pass.

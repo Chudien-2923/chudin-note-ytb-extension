@@ -3,7 +3,8 @@ import {
   type PlayerBinding,
   type PlayerSnapshot,
 } from "../domain/types";
-import { parseVideoId, sameBinding } from "../domain/identity";
+import { sameBinding } from "../domain/identity";
+import { senderVideoId } from "./sender";
 import { record, validateReport } from "../shared/protocol";
 import type {
   PanelAuthority,
@@ -62,9 +63,7 @@ export function createQuickNoteRequests(
             "PLAYER_UNAVAILABLE",
             "Chờ video chính để ghi chú nhanh.",
           );
-        if (
-          report.videoId !== parseVideoId(new URL(sender.url ?? "about:blank"))
-        )
+        if (report.videoId !== senderVideoId(sender))
           throw new AppError(
             "UNAUTHORIZED",
             "Video ghi chú nhanh không khớp trang.",

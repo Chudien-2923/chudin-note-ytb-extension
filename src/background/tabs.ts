@@ -18,6 +18,7 @@ import {
   watchUrl,
 } from "../domain/identity";
 import type { PendingSeekStore } from "../storage/pending-seeks";
+import { senderVideoId } from "./sender";
 import { record, validateReport } from "../shared/protocol";
 export type PlayerContext = Pick<
   PanelContext,
@@ -287,7 +288,7 @@ export function createTabCoordinator(input: {
         sender.tab?.id === undefined ||
         sender.tab.windowId === undefined ||
         !sender.documentId ||
-        report.videoId !== fromUrl(sender.url)
+        report.videoId !== senderVideoId(sender)
       )
         return;
       const old = reports.get(sender.tab.id);

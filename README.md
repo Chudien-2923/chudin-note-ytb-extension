@@ -18,7 +18,7 @@ Ghi lại điều bạn hiểu khi xem YouTube, rồi đọc và tìm lại theo
 
 ## Trạng thái
 
-**0.1.0 — chưa có bản GitHub Release.** Chủ repo đã tự kiểm tra và xác nhận các luồng ghi nhanh, fullscreen chia vùng và phím đóng hoạt động trên môi trường của họ. Typecheck, 215 behavioral tests, build/ZIP và command-line smoke đã chạy; chưa chứng nhận mọi phiên bản Chrome/OS, IME hoặc trường hợp trong [checklist kiểm tra](docs/TESTING.md). Source code ZIP không thay cho build cài đặt.
+**0.1.0 — chưa có bản GitHub Release.** Chủ repo đã tự kiểm tra và xác nhận các luồng ghi nhanh, fullscreen chia vùng và phím đóng hoạt động trên môi trường của họ; sau bản sửa kết nối khi YouTube chuyển trang nội bộ, người dùng cũng báo hoạt động ổn trở lại. Typecheck, 221 behavioral tests, build/ZIP và command-line smoke đã chạy. Chưa chứng nhận mọi phiên bản Chrome/OS, IME hoặc từng trường hợp trong [checklist kiểm tra](docs/TESTING.md). Source code ZIP không thay cho build cài đặt.
 
 ## Cài từ bản ZIP GitHub
 
@@ -78,6 +78,12 @@ Option+N dùng phím vật lý N, kể cả macOS phát sinh dead key; không ch
 Chọn sổ trước. Khi đang phát quảng cáo, extension cố ý không lấy timestamp quảng cáo để ghi cho video chính. Nút/ô nhập tự mở khi player chính sẵn sàng; tiêu đề lấy từ tên bài trên watch page, không từ tên quảng cáo. Nháp đã có vẫn sửa được. Nếu hết quảng cáo mà vẫn bị khóa, gửi ảnh trạng thái và phiên bản Chrome để chẩn đoán; không xóa dữ liệu/gỡ extension.
 
 Sau mỗi lần cập nhật build: Reload **đúng extension đang cài** ở `chrome://extensions`, rồi tải lại tab YouTube để thay content script. Nếu không reload tab, phím N mới chưa được cài vào trang đó.
+
+### Nếu panel báo không kết nối được
+
+Bản sửa hiện tại xử lý trường hợp YouTube chuyển từ trang chủ sang video hoặc video A sang B mà không tải lại toàn trang: URL ban đầu của content script có thể còn là trang chủ/video cũ. Extension dùng URL tab hiện tại để kiểm tra video, vẫn xác thực đúng nguồn và document; không bỏ bảo vệ phiên.
+
+Cập nhật build vào cùng folder cài đặt, Reload **đúng extension hiện có**, rồi tải lại tab YouTube. Không Remove, đổi extension ID hoặc xóa dữ liệu. Thử từ trang chủ bấm vào video → N/Option+N, sau đó chuyển sang video khác mà không reload trang. Ghi chú phải thuộc đúng video. Nếu vẫn lỗi, gửi thông báo cụ thể đang hiện; worker failures không còn bị thay bằng câu reload chung. Không chia sẻ session token hoặc nội dung ghi chú.
 
 ## Dữ liệu và riêng tư
 

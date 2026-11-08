@@ -434,7 +434,6 @@ describe("authenticated panel frame data operations", () => {
       frame(),
       host("host-4", { active: false }),
       host("host-4", {}, { frameId: 2 }),
-      host("host-4", {}, { url: "https://www.youtube.com/shorts/abcdefghijk" }),
       host("host-4", {}, { id: "foreign" }),
       notebookPage,
     ])

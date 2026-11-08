@@ -53,6 +53,20 @@ async function openPanel(quickNote?: PlayerReport, reveal = true) {
     });
     if (sequence !== panelSequence) return;
     if (
+      reply &&
+      typeof reply === "object" &&
+      "ok" in reply &&
+      reply.ok === false &&
+      "error" in reply &&
+      reply.error &&
+      typeof reply.error === "object" &&
+      "message" in reply.error &&
+      typeof reply.error.message === "string"
+    ) {
+      panel.showError(reply.error.message);
+      return;
+    }
+    if (
       !reply ||
       typeof reply !== "object" ||
       !("ok" in reply) ||

@@ -1,5 +1,5 @@
 import { AppError } from "../domain/types";
-import { parseVideoId } from "../domain/identity";
+import { senderVideoId } from "./sender";
 
 const YOUTUBE_ORIGIN = "https://www.youtube.com";
 const MAX_TOKEN_LENGTH = 256;
@@ -76,12 +76,7 @@ export function createPanelSessions(extensionId: string): PanelSessions {
     if (byTab.get(session.tabId) === session) byTab.delete(session.tabId);
   };
   const trustedHost = (sender: chrome.runtime.MessageSender): PanelHost => {
-    let watching: string | null = null;
-    try {
-      watching = parseVideoId(new URL(sender.url ?? "about:blank"));
-    } catch {
-      /* An unparsable sender URL is unauthorized. */
-    }
+    const watching = senderVideoId(sender);
     const tab = sender.tab;
     if (
       sender.id !== extensionId ||

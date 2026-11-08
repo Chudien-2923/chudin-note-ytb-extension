@@ -14,5 +14,6 @@
 - Option+N/Alt+N pause video chính, focus ô nhập và tạo/tiếp tục nháp. Note mới lùi mốc 20 giây, chặn tại 00:00 (12:00 → 11:40); nháp cũ không đổi. Enter phát tiếp chỉ sau durable save; Shift+Enter newline, IME không submit. Không play sai tab/video/navigation hoặc sau lỗi ghi.
 - Fullscreen chia vùng video bên trái/panel bên phải thay vì đè lên hình và phụ đề; video giữ tỷ lệ bằng contain, title/caption/transport cùng vùng trái. Resize/fullscreen exit/close phục hồi layout, giữ nguyên iframe/nháp; Enter không tự ẩn panel.
 - Option+Command+N trên Mac đóng panel từ trang hoặc textarea, giữ iframe/nháp và phục hồi bố cục; không toggle mở lại, không lưu/xóa note hay pause/resume; tôn trọng composition và repeat.
+- Sửa panel bị từ chối sau khi YouTube chuyển trang nội bộ: dùng URL tab hiện tại thay URL ban đầu của content script cho phiên panel, báo cáo player và ghi nhanh. Giữ kiểm tra nguồn/frame/document/tab/window và chặn video cũ; hiển thị nguyên nhân worker trả về thay thông báo reload chung.
 
 Command verification và command-line integration smoke đã chạy; **Chrome thật và review thị giác/native IME đang chờ người dùng nghiệm thu**. Chưa public release, không Chrome Web Store, không backup/export hoặc auto-update.

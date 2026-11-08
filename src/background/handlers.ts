@@ -1,5 +1,5 @@
 import { AppError, asAppError, type PanelContext } from "../domain/types";
-import { parseVideoId } from "../domain/identity";
+import { senderVideoId } from "./sender";
 import type { Repository } from "../storage/repository";
 import {
   record,
@@ -110,7 +110,7 @@ export function createBackgroundHandlers(input: {
             throw new AppError("UNAUTHORIZED", "Nguồn player không được phép.");
           panels.observeTopDocument(sender);
           const report = validateReport(raw.payload);
-          if (report.videoId !== parseVideoId(url))
+          if (report.videoId !== senderVideoId(sender))
             throw new AppError("STALE_CONTEXT", "Video đã thay đổi.");
           tabs.acceptReport(report, sender);
           const signature = JSON.stringify([

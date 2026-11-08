@@ -91,8 +91,6 @@ describe("session issue", () => {
       { url: "https://www.youtube.com.evil.test/watch?v=abcdefghijk" },
     ],
     ["non-https", { url: "http://www.youtube.com/watch?v=abcdefghijk" }],
-    ["shorts", { url: "https://www.youtube.com/shorts/abcdefghijk" }],
-    ["home page", { url: "https://www.youtube.com/" }],
     ["extension page", { url: `${origin}/sidepanel.html` }],
     ["no tab", { tab: undefined }],
   ])("refuses a non-trusted top frame: %s", (_name, override) => {
