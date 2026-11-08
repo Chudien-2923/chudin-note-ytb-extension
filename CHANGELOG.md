@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — Unreleased
+## 0.1.0 — 2026-11-08
 
 - Panel ghi chú trong trang YouTube: iframe extension-origin xác thực theo tab/document, giữ giao diện/editor và IndexedDB cũ, thay native Chrome side panel để hỗ trợ focus bằng bàn phím.
 - Cuốn sổ tự tạo, chọn/đổi tên/chuyển video; reader theo video/toàn sổ và tìm tiếng Việt.
@@ -16,4 +16,4 @@
 - Option+Command+N trên Mac đóng panel từ trang hoặc textarea, giữ iframe/nháp và phục hồi bố cục; không toggle mở lại, không lưu/xóa note hay pause/resume; tôn trọng composition và repeat.
 - Sửa panel bị từ chối sau khi YouTube chuyển trang nội bộ: dùng URL tab hiện tại thay URL ban đầu của content script cho phiên panel, báo cáo player và ghi nhanh. Giữ kiểm tra nguồn/frame/document/tab/window và chặn video cũ; hiển thị nguyên nhân worker trả về thay thông báo reload chung.
 
-Command verification và command-line integration smoke đã chạy; **Chrome thật và review thị giác/native IME đang chờ người dùng nghiệm thu**. Chưa public release, không Chrome Web Store, không backup/export hoặc auto-update.
+Bản phát hành GitHub đầu tiên, dạng unpacked. Command verification và command-line integration smoke đã chạy; người dùng xác nhận các luồng cơ bản và bản sửa kết nối hoạt động trong Chrome của họ. Chưa chứng nhận mọi phiên bản Chrome/OS, native IME hay từng kịch bản trong docs/TESTING.md. Không Chrome Web Store, không backup/export hoặc auto-update; nâng cấp thủ công vào cùng folder và giữ nguyên extension ID/profile.

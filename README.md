@@ -18,13 +18,13 @@ Ghi lại điều bạn hiểu khi xem YouTube, rồi đọc và tìm lại theo
 
 ## Trạng thái
 
-**0.1.0 — chưa có bản GitHub Release.** Chủ repo đã tự kiểm tra và xác nhận các luồng ghi nhanh, fullscreen chia vùng và phím đóng hoạt động trên môi trường của họ; sau bản sửa kết nối khi YouTube chuyển trang nội bộ, người dùng cũng báo hoạt động ổn trở lại. Typecheck, 221 behavioral tests, build/ZIP và command-line smoke đã chạy. Chưa chứng nhận mọi phiên bản Chrome/OS, IME hoặc từng trường hợp trong [checklist kiểm tra](docs/TESTING.md). Source code ZIP không thay cho build cài đặt.
+**0.1.0 — [bản phát hành GitHub đầu tiên](https://github.com/Chudien-2923/chudin-note-ytb-extension/releases/tag/v0.1.0).** Chủ repo đã tự kiểm tra và xác nhận các luồng ghi nhanh, fullscreen chia vùng và phím đóng hoạt động trên môi trường của họ; sau bản sửa kết nối khi YouTube chuyển trang nội bộ, người dùng cũng báo hoạt động ổn trở lại. Typecheck, 221 behavioral tests, build/ZIP và command-line smoke đã chạy. Chưa chứng nhận mọi phiên bản Chrome/OS, IME hoặc từng trường hợp trong [checklist kiểm tra](docs/TESTING.md). Source code ZIP không thay cho build cài đặt.
 
 ## Cài từ bản ZIP GitHub
 
-Dự án chỉ phân phối dạng unpacked qua GitHub, **không Chrome Web Store**, không file tự cài có chữ ký và không auto-update. Khi maintainer đã đăng release:
+Dự án chỉ phân phối dạng unpacked qua GitHub, **không Chrome Web Store**, không file tự cài có chữ ký và không auto-update.
 
-1. Tải ZIP build `chudin-note-youtube-X.Y.Z.zip` trong GitHub Releases của repository này. Source code ZIP tự tạo bởi GitHub **không phải** build cài đặt.
+1. Tải [ZIP cài đặt v0.1.0 — `chudin-note-youtube-0.1.0.zip`](https://github.com/Chudien-2923/chudin-note-ytb-extension/releases/download/v0.1.0/chudin-note-youtube-0.1.0.zip). Source code ZIP tự tạo bởi GitHub **không phải** build cài đặt.
 2. Giải nén vào một folder cố định, không xóa/đổi vị trí folder sau khi cài. Trong folder phải có `manifest.json`.
 3. Tự mở `chrome://extensions`, bật **Developer mode**, chọn **Load unpacked**, chọn folder chứa manifest.
 4. Tải lại các tab YouTube đã mở trước khi cài. Ghim icon extension nếu muốn, bấm icon để mở panel.
@@ -109,6 +109,8 @@ Chỉ watch page video thường trên `www.youtube.com` (có thể mở trong p
 Không AI/transcript, ảnh chụp, rich text, tags, xuất/nhập, xóa cả sổ hay đồng bộ. Video private/đã xóa không làm mất note local, nhưng không thể tua nếu YouTube không phát được video.
 
 ## Cập nhật an toàn
+
+**Nâng cấp được, nhưng không tự động.** Theo dõi [GitHub Releases](https://github.com/Chudien-2923/chudin-note-ytb-extension/releases) để tải ZIP build khi có phiên bản mới. Giữ cùng Chrome profile, extension ID và folder cài đặt để tiếp tục dùng dữ liệu cũ; việc push source lên GitHub không cập nhật extension đã cài.
 
 1. **Không gỡ extension.** Không xóa dữ liệu/profile.
 2. Giải nén build mới đè nội dung vào **cùng folder cài đặt**, giữ đường dẫn ổn định.

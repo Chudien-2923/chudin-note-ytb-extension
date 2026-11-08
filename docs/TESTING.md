@@ -1,5 +1,15 @@
 # Kiểm chứng
 
+## Kiểm tra gói phát hành v0.1.0 — 2026-11-08
+
+Chủ repo yêu cầu phát hành GitHub Release v0.1.0 kèm ZIP; không yêu cầu Store hoặc auto-update. Trước cập nhật release metadata, working tree ở commit `bbf9ea670098fe6496adbfa5537c7ed9294966de` sạch và đồng bộ origin/main. Chạy từ lockfile bằng `npm ci` (87 packages), typecheck exit 0, **221/221 tests trong 17 files**, build/pack/unzip integrity/list pass. Đây là working tree hiện có, không phải một clean clone độc lập hoặc bằng chứng CI Linux.
+
+ZIP `artifacts/chudin-note-youtube-0.1.0.zip` gồm 16 runtime files, manifest version 0.1.0 và LICENSE; không source, node_modules, credentials hay note dữ liệu. SHA256: `e769aa949c0ad37e9029fa492a4dfded58652a3b3bdb8fa9ac360357a6cdada1`.
+
+Giải nén ZIP vào thư mục tạm và chạy worker/content bundle thật bằng Node/jsdom + fake-indexeddb: home→A→B→A với URL nguồn giữ `/`, private grant/attach, context ready, note A không lẫn sang B và vẫn đọc lại được, quick pause B, stale seek/quick A bị từ chối; giữ cùng panel frame. Đây là command-line smoke trên chính file trong ZIP, không phải cài ZIP vào Chrome hoặc chứng nhận native editor/focus.
+
+Người dùng đã xác nhận Chrome hoạt động ổn sau bản sửa URL như ghi nhận bên dưới. Phiên bản Chrome cụ thể, cài ZIP trên profile mới và nâng cấp ZIP giữ note/nháp chưa có báo cáo riêng. Release notes phải nêu những giới hạn này, dữ liệu local không có backup/export, và cập nhật unpacked là thủ công vào cùng folder/extension ID/profile.
+
 ## Sửa nhận diện URL sau chuyển trang nội bộ — 2026-11-08
 
 Người dùng báo panel vẫn lỗi sau reload. Chẩn đoán do người dùng tự chạy trong Chrome cho thấy worker trả `UNAUTHORIZED`; extension/top-frame/document/active/tab/window đều hợp lệ, nhưng URL nguồn có path `/`, trong khi URL tab có path `/watch` và video ID hợp lệ. Đây là bằng chứng Chrome của ca lỗi, không phải bằng chứng đã nghiệm thu bản sửa.
